@@ -72,11 +72,11 @@ class HomePage extends React.Component {
   getAllVotes = async () => {
     const votes = await getVotes()
     const positive = votes.data.filter((vote) => {
-      return vote.value === 1
+      return vote.value == 1
     })
 
     const negative = votes.data.filter((vote) => {
-      return vote.value === 0
+      return vote.value == 0
     })
 
     this.setState({
