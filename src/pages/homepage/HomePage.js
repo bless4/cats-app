@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "../../assets/style/App.css";
 import { observer } from "mobx-react";
 import axios from 'axios';
-import { getPhotos, getVotes, getAllFavourites } from "../../utils/requests";
+import { getPhotos,  getVotes, 
+  getAllFavourites } from "../../utils/requests";
 import ReactPaginate from "react-paginate";
 import filter from 'lodash/filter';
 import find from 'lodash/find';
@@ -54,12 +55,10 @@ class HomePage extends React.Component {
 
   getSpecificFavourite = (fav_id) => {
     axios.get(`https://api.thecatapi.com/v1/favourites/${fav_id}`, 
-    { 
-      headers: {
-         "Content-Type": "application/json",
-          "x-api-key": "98de9fca-14cc-430d-a65f-e4930c214699"
-         }
-         }
+    { headers: { "Content-Type": "application/json",
+     "x-api-key": "98de9fca-14cc-430d-a65f-e4930c214699"
+     }
+     }
     )
       .then(res => {
         
@@ -140,11 +139,11 @@ class HomePage extends React.Component {
   handleFavSubmit = async (event, fav) => {
     event.preventDefault();
 
-    await axios.post(`https://api.thecatapi.com/v1/favourites`, fav, 
-    {
-       headers: { "Content-Type": "application/json",
-        "x-api-key": "98de9fca-14cc-430d-a65f-e4930c214699"
-       } }
+    await axios.post(`https://api.thecatapi.com/v1/favourites`, fav,
+     { headers: { "Content-Type": "application/json",
+      "x-api-key": "98de9fca-14cc-430d-a65f-e4930c214699" 
+    } 
+  }
     )
       .then(res => {
         if(_.get(res, "data.message", "FAIL") === "SUCCESS") {
@@ -164,12 +163,11 @@ class HomePage extends React.Component {
     // const favourite_id = localStorage.getItem('favId');
     const favourite_id = fav_id;
 
-    axios.delete(`https://api.thecatapi.com/v1/favourites/${favourite_id}`, { 
-      headers: { 
-        "Content-Type": "application/json",
-         "x-api-key": "98de9fca-14cc-430d-a65f-e4930c214699" 
-        } 
-      }
+    axios.delete(`https://api.thecatapi.com/v1/favourites/${favourite_id}`,
+     { headers: { "Content-Type": "application/json",
+      "x-api-key": "98de9fca-14cc-430d-a65f-e4930c214699"
+     } 
+    }
     )
       .then(res => {
         localStorage.removeItem('favId');
@@ -191,12 +189,10 @@ class HomePage extends React.Component {
     }
     
     axios.post(`https://api.thecatapi.com/v1/votes`, voteReqObj,
-     {
-        headers: { 
-          "Content-Type": "application/json",
-           "x-api-key": "98de9fca-14cc-430d-a65f-e4930c214699"
-           } 
-          }
+     { headers: { "Content-Type": "application/json",
+      "x-api-key": "98de9fca-14cc-430d-a65f-e4930c214699" 
+    } 
+  }
     )
       .then(res => {
         this.getAllVotes();
@@ -238,51 +234,85 @@ class HomePage extends React.Component {
       const voteObj = {};
       voteObj.image_id= p.id;
       
-      if(!_.isEmpty(p.sub_id)) {
-        voteObj.sub_id= p.sub_id;
-      }
+      
 
       const totalVoteUp = _.filter(this.state.votes, {...voteObj, value: 1});
       const totalVoteDown = _.filter(this.state.votes, {...voteObj, value: 0});
 
+     
+
+      const fadeIn = () => {
+        let el = document.querySelector('.centered');
+
+        if (!this.state.visible) {
+          return el.classList.add('fadeIn'), el.classList.remove('fadeOut');
+        } else {
+          return el.classList.add('fadeOut'), el.classList.remove('fadeIn'), 
+          el.classList.remove('fadeIn'), el.classList.remove('fadeIn');
+
+        }
+      }
+
+      const fadeOut = () => {
+        let el = document.querySelector('.centered');
+        this.setState({
+          visible: false
+        })
+        if (!this.state.visible) {
+          return el.classList.add('fadeOut'), el.classList.remove('fadeIn')
+        } else {
+          return el.classList.add('fadeIn'), el.classList.remove('fadeOut')
+
+        }
+      }
+
       const is_fav = _.find(this.state.favourites, {...fav});
+
+      let score = totalVoteUp.length - totalVoteDown.length;
+      let scoreClass = 'score-blue';
+      if(totalVoteUp.length > totalVoteDown.length) {
+        scoreClass = 'score-blue';
+      } else if(totalVoteUp.length < totalVoteDown.length) {
+        scoreClass = 'score-red';
+      } else {
+        scoreClass = 'score-green';
+      }
 
       return (
         <div className="col-md-6 col-xl-3 mt-5" key={p.id}>
           <div className="cat-card card-shadow">
             <div className="cat-card-top">
-            {/* <small>{p.id}-{p.sub_id}</small> */}
+            
               <img className="cat-img" key={p.id} src={p.url} id="img_wrap" />
               
               {is_fav ?  
-                <button type="button" className="fav-btn btn btn-primary btn-lg"
-                 onClick={(e) => this.handleUnFavSubmit(e, is_fav.id)}>
+                <button type="button" className="fav-btn btn btn-primary btn-lg" 
+                onClick={(e) => this.handleUnFavSubmit(e, is_fav.id)}>
                   <i className="fa fa-heart"></i>
                 </button>                        
               : 
                 <button type="button" className="fav-btn btn btn-primary btn-lg" 
+                
                 onClick={(e) => this.handleFavSubmit(e, fav)}>
                   <i className="fa fa-heart un-fa-heart"></i>
                 </button>                        
               }
             </div>
-              
+
             <div className="row mx-0">
               <div className="col">
-                <p className="mb-2">
-                  <span className="total-votes totla-up-votes">
-                    {totalVoteUp.length}
-                  </span>
-                </p>
-                <button type="button" className="btn btn-success btn-lg w-100 vote-up" 
-                onClick={(e) => this.handleVoteSubmit(e, voteUp)}>Vote Up</button>
+                <span className={`total-score ${scoreClass}`}>Scores : {score}</span>
+              </div>
+            </div>
+
+            <div className="row mx-0">
+              <div className="col">
+              
+                <button type="button" className="btn btn-success btn-lg w-100 vote-up"
+                 onClick={(e) => this.handleVoteSubmit(e, voteUp)}>Vote Up</button>
               </div>
               <div className="col">
-                <p className="mb-2">
-                  <span className="total-votes totla-down-votes">
-                    {totalVoteDown.length}
-                  </span>
-                </p>
+               
                 <button type="button" className="btn btn-danger btn-lg w-100" w-100 
                 onClick={(e) => this.handleVoteSubmit(e, voteDown)}>Vote Down </button>
               </div>
@@ -293,6 +323,7 @@ class HomePage extends React.Component {
     });
 
     const offset = pagination.currentPage * PER_PAGE;
+
 
     const pageCount = Math.ceil(pagination.total / PER_PAGE);
 

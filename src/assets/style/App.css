@@ -185,3 +185,30 @@
   background-color: #007bff;
   border-color: #007bff;
 }
+
+.vote-up:hover,
+.vote-up:focus,
+.vote-up:active {
+  background-color: #0040ff !important;
+  border-color: #0040ff !important;
+}
+
+.total-score{
+  margin-bottom: 15px !important;
+  display: block;
+}
+
+.score-red {
+  color: #c82333;
+  /* border-color: #bd2130; */
+}
+
+.score-green {
+  color: #28a745;
+  /* border-color: #28a745; */
+}
+
+.score-blue {
+  color: #007bff;
+  /* border-color: #007bff; */
+}

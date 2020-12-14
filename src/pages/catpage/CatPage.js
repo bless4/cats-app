@@ -23,10 +23,8 @@ class CatPage extends React.Component {
     formData.append('sub_id', this.state.sub_id);
     formData.append('file', this.state.file);
     const config = {
-      headers: { 
-        "Content-Type": "multipart/form-data",
-         "x-api-key": "98de9fca-14cc-430d-a65f-e4930c214699"
-         }
+      headers: { "Content-Type": "multipart/form-data", 
+      "x-api-key": "98de9fca-14cc-430d-a65f-e4930c214699" }
     };
     axios.post("https://api.thecatapi.com/v1/images/upload", formData, config)
       .then((response) => {
@@ -60,8 +58,8 @@ class CatPage extends React.Component {
             </div>
             <div className="form-group text-left my-4">
               <label>Image</label>
-              <input type="file" className="form-control btn mt-1 p-0" 
-              id="exampleInputPassword1" name="file" onChange={this.onChange} />
+              <input type="file" className="form-control btn mt-1 p-0" id="exampleInputPassword1" 
+              name="file" onChange={this.onChange} />
             </div>
             <button type="submit" className="btn btn-primary btn-lg btn-block my-2">Submit</button>
           </form>

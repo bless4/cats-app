@@ -1,5 +1,5 @@
 import React from "react";
-import { Router, Route } from "react-router-dom";
+import { Router, Route, Link } from "react-router-dom";
 import { photosStore } from "./utils/store";
 import history from './utils/history'
 import TopBar from "./components/TopBar";

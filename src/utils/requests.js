@@ -1,7 +1,6 @@
 const axios = require("axios");
 export const APIURL = "https://api.thecatapi.com";
-export const getPhotos = (limit, page) =>
- axios.get(`${APIURL}/v1/images?limit=${limit}&page=${page}&order=ASC`, {
+export const getPhotos = (limit, page) => axios.get(`${APIURL}/v1/images?limit=${limit}&page=${page}&order=ASC`, {
   headers: {
     "Content-Type": "multipart/form-data",
     "x-api-key": "98de9fca-14cc-430d-a65f-e4930c214699"
