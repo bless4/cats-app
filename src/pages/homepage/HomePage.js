@@ -241,31 +241,6 @@ class HomePage extends React.Component {
 
      
 
-      const fadeIn = () => {
-        let el = document.querySelector('.centered');
-
-        if (!this.state.visible) {
-          return el.classList.add('fadeIn'), el.classList.remove('fadeOut');
-        } else {
-          return el.classList.add('fadeOut'), el.classList.remove('fadeIn'), 
-          el.classList.remove('fadeIn'), el.classList.remove('fadeIn');
-
-        }
-      }
-
-      const fadeOut = () => {
-        let el = document.querySelector('.centered');
-        this.setState({
-          visible: false
-        })
-        if (!this.state.visible) {
-          return el.classList.add('fadeOut'), el.classList.remove('fadeIn')
-        } else {
-          return el.classList.add('fadeIn'), el.classList.remove('fadeOut')
-
-        }
-      }
-
       const is_fav = _.find(this.state.favourites, {...fav});
 
       let score = totalVoteUp.length - totalVoteDown.length;
